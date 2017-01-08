@@ -32,6 +32,7 @@ set(CMAKE_DEBUG_POSTFIX d)
 add_executable(
   Osiris
   src/Osiris.cpp
+  src/FilteredCircularBuffer.hpp
   )
 
 target_link_libraries(
