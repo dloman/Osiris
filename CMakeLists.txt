@@ -39,3 +39,14 @@ target_link_libraries(
   Osiris
   ${OpenCV_LIBRARIES}
   )
+
+
+add_executable(
+  ColorFinder
+  src/ColorFinder.cpp
+  )
+
+target_link_libraries(
+  ColorFinder
+  ${OpenCV_LIBRARIES}
+  )

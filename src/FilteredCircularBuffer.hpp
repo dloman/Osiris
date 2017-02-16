@@ -15,7 +15,11 @@ class FilteredCircularBuffer
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
-    FilteredCircularBuffer() = default;
+    FilteredCircularBuffer()
+    : mDeque(),
+      mNumberOfConsecutiveMisses(0)
+    {
+    }
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -52,6 +56,14 @@ class FilteredCircularBuffer
     bool push_back(const cv::RotatedRect Rectangle)
     {
       bool Return = false;
+
+      if (mNumberOfConsecutiveMisses > 200)
+      {
+        std::cout << "CLEAR" << std::endl;
+        mNumberOfConsecutiveMisses = 0;
+        mDeque.clear();
+      }
+
       if (mDeque.size() == Size)
       {
 
@@ -76,18 +88,13 @@ class FilteredCircularBuffer
           SizeDeviation.y < 4 * StdDevSize.height)
         {
           mDeque.push_back(Rectangle);
+          mNumberOfConsecutiveMisses = 0;
           Return = true;
         }
-
-        //std::cout
-        //<< "angle dev = " << std::abs(Rectangle.angle - AverageAngle)
-        //<< " std angle =" <<3*StdDevAngle << '\n'
-        //<< " Center x = " << CenterDeviation.x << " stddev center x = " << 4*StdDevCenter.x << '\n'
-        //<< " dev center y = " << CenterDeviation.y << " stddev center y=" << 4*StdDevCenter.y << '\n'
-        //<< " size width = " << SizeDeviation.x <<  " stdeb size width = " << 4*StdDevSize.width << '\n'
-        //<< " size height = " << SizeDeviation.y << " stddev height = " << 4*StdDevSize.height << std::endl;
-        //auto i = 5;
-
+        else
+        {
+          mNumberOfConsecutiveMisses++;
+        }
       }
       else
       {
@@ -170,4 +177,5 @@ class FilteredCircularBuffer
     }
 
     std::deque<cv::RotatedRect> mDeque;
+    unsigned mNumberOfConsecutiveMisses;
 };
