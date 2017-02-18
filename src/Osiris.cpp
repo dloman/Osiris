@@ -133,7 +133,7 @@ cv::Point2i GetPoint(const cv::Point2i& Input, const cv::Size& Size)
 
   Output.x = clamp(Input.x, 0, Size.width);
 
-  Output.y = clamp(Input.y, 0, Size.width);
+  Output.y = clamp(Input.y, 0, Size.height);
 
   return Output;
 }
@@ -261,24 +261,24 @@ int main(int argc, const char** argv)
         LinePoints.emplace_back(Line[2], Line[3]);
       }
 
-       if (LinePoints.size())
-       {
-         auto Temp = cv::minAreaRect(LinePoints);
-         auto DidItWork = BoundingBoxBuffer.push_back(Temp);
+      if (LinePoints.size())
+      {
+        auto Temp = cv::minAreaRect(LinePoints);
+        auto DidItWork = BoundingBoxBuffer.push_back(Temp);
 
-         if (DidItWork)
-         {
-           DrawRoundedRectangle(Temp, HoughFrame, cv::Scalar(60, 255, 60));
-         }
-         else
-         {
-           DrawRoundedRectangle(Temp, HoughFrame, cv::Scalar(255, 255, 60));
-         }
-       }
+        if (DidItWork)
+        {
+          DrawRoundedRectangle(Temp, HoughFrame, cv::Scalar(60, 255, 60));
+        }
+        else
+        {
+          DrawRoundedRectangle(Temp, HoughFrame, cv::Scalar(255, 255, 60));
+        }
+      }
 
-       auto CurrentTablePosition = BoundingBoxBuffer.GetValue();
+      auto CurrentTablePosition = BoundingBoxBuffer.GetValue();
 
-       DrawRoundedRectangle(CurrentTablePosition, FilteredFrame, cv::Scalar(255, 60, 60));
+      DrawRoundedRectangle(CurrentTablePosition, FilteredFrame, cv::Scalar(255, 60, 60));
 
       auto ColorHistogram = ComputeColorHistogram(
         GetImageChip(VideoFrame, CurrentTablePosition));
@@ -286,9 +286,9 @@ int main(int argc, const char** argv)
       std::cout << ComputeScore(ColorHistogram) << '\n';
 
 
-      cv::imshow("averaged", AveragedFrame);
+      //cv::imshow("averaged", AveragedFrame);
       //cv::imshow("hough", HoughFrame);
-      //cv::imshow("filtered Frame", FilteredFrame);
+      cv::imshow("filtered Frame", FilteredFrame);
       cv::waitKey(1);
 
     }
