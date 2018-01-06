@@ -21,9 +21,17 @@ find_package(OpenCV 3 REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-#find_package(DanLib REQUIRED)
-#
-#include_directories(${DanLib_INCLUDE_DIR})
+find_package(VideoLib REQUIRED)
+
+include_directories(${VideoLib_INCLUDE_DIR})
+
+find_package(DanLib REQUIRED)
+
+include_directories(${DanLib_INCLUDE_DIR})
+
+find_package(FFmpeg REQUIRED)
+
+include_directories(${FFMPEG_INCLUDE_DIR})
 
 include_directories(src)
 
@@ -37,5 +45,7 @@ add_executable(
 
 target_link_libraries(
   Osiris
+  VideoPlayerLib
   ${OpenCV_LIBRARIES}
+  ${FFMPEG_LIBRARIES}
   )
